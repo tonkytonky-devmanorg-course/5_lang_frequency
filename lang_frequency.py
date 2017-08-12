@@ -18,9 +18,8 @@ def main():
 
 def get_most_frequent_words(filepath):
     frequency_dict = {}
-    for words in load_words(filepath):
-        for word in words:
-            frequency_dict[word] = frequency_dict.get(word, 0) + 1
+    for word in load_words(filepath):
+        frequency_dict[word] = frequency_dict.get(word, 0) + 1
 
     for word in sorted(frequency_dict.items(), key=lambda item: item[1], reverse=True)[:10]:
         print(word[0])
@@ -29,7 +28,9 @@ def get_most_frequent_words(filepath):
 def load_words(filepath):
     with open(filepath, 'r', encoding='utf-8') as input_file:
         for line in input_file:
-            yield [word for word in re.split(SPLIT_PATTERN, line.strip().lower()) if word]
+            for word in re.split(SPLIT_PATTERN, line.strip().lower()):
+                if word:
+                    yield word
 
 
 if __name__ == '__main__':
