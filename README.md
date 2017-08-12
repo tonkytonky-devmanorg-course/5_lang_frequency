@@ -1,7 +1,28 @@
-# Frequency Analysis of Words
+# Подсчёт частоты слов в тексте
 
-[TODO. There will be project description]
+Скрипт для подсчёта количества употреблений слов в тексте. Возвращает 10 наиболее употребимых слов в порядке уменьшения частоты вхождения в текст.
 
-# Project Goals
+# Как использовать
 
-The code is written for educational purposes. Training course for web-developers - [DEVMAN.org](https://devman.org)
+Скрипт требует для своей работы установленного интерпретатора Python версии 3.5.
+Для запуска из консоли передайте первым аргументом путь к файлу TXT, частотность слов в котором хотите узнать.
+ 
+Запуск на Linux:
+
+```#!bash
+$ python lang_frequency.py <path to file>
+<word top1>
+<word top2>
+<word top3>
+<word top4>
+<word top5>
+<word top6>
+<word top7>
+<word top8>
+<word top19
+<word top10>
+``` 
+
+# Цели проекта
+
+Код создан в учебных целях. В рамках учебного курса по веб-разработке ― [DEVMAN.org](https://devman.org)
