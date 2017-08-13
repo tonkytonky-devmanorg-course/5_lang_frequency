@@ -1,5 +1,6 @@
-import sys
+from collections import Counter
 import re
+import sys
 
 
 SPLIT_LIST = ['\.', ',', ':', ';', '\(', '\)', '!', '\?', '"', '«', '»']
@@ -17,11 +18,8 @@ def main():
 
 
 def get_most_frequent_words(filepath):
-    frequency_dict = {}
-    for word in load_words(filepath):
-        frequency_dict[word] = frequency_dict.get(word, 0) + 1
-
-    for word in sorted(frequency_dict.items(), key=lambda item: item[1], reverse=True)[:10]:
+    frequency_dict = Counter(list(load_words(filepath)))
+    for word in frequency_dict.most_common(10):
         print(word[0])
 
 
