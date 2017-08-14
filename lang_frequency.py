@@ -5,6 +5,7 @@ import sys
 
 SPLIT_LIST = ['\.', ',', ':', ';', '\(', '\)', '!', '\?', '"', '«', '»']
 SPLIT_PATTERN = '\s|' + '|'.join('\s?{}\s?'.format(punctuation) for punctuation in SPLIT_LIST)
+MOST_COMMON_COUNT = 10
 
 
 def main():
@@ -19,7 +20,7 @@ def main():
 
 def get_most_frequent_words(filepath):
     frequency_dict = Counter(list(load_words(filepath)))
-    for word in frequency_dict.most_common(10):
+    for word in frequency_dict.most_common(MOST_COMMON_COUNT):
         print(word[0])
 
 
