@@ -1,36 +1,42 @@
+import argparse
 from collections import Counter
-import re
-import sys
+import string
 
-
-SPLIT_LIST = ['\.', ',', ':', ';', '\(', '\)', '!', '\?', '"', '«', '»']
-SPLIT_PATTERN = '\s|' + '|'.join('\s?{}\s?'.format(punctuation) for punctuation in SPLIT_LIST)
 MOST_COMMON_COUNT = 10
 
 
-def main():
-    try:
-        get_most_frequent_words(sys.argv[1])
-    except IndexError:
-        print(
-            'Please, call the script with a path to a TXT file. '
-            'You need to specify the path as the first script argument.'
-        )
+def _main():
+    args = get_args()
+    words = proceed_word(load_words(args.filename))
+
+    for word, _ in get_most_common_words(words, MOST_COMMON_COUNT):
+        print(word)
 
 
-def get_most_frequent_words(filepath):
-    frequency_dict = Counter(list(load_words(filepath)))
-    for word in frequency_dict.most_common(MOST_COMMON_COUNT):
-        print(word[0])
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filename', help='Path to TXT file with text to analyze')
+    return parser.parse_args()
 
 
 def load_words(filepath):
     with open(filepath, 'r', encoding='utf-8') as input_file:
         for line in input_file:
-            for word in re.split(SPLIT_PATTERN, line.strip().lower()):
-                if word:
-                    yield word
+            for word in line.split(' '):
+                yield word
+
+
+def proceed_word(words):
+    for word in words:
+        word = word.lower().strip(string.punctuation + string.whitespace + '«»')
+        if word:
+            yield word
+
+
+def get_most_common_words(words, most_common_count):
+    frequency_dict = Counter(words)
+    return frequency_dict.most_common(most_common_count)
 
 
 if __name__ == '__main__':
-    main()
+    _main()
