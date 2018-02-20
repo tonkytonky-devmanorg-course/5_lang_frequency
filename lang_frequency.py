@@ -7,7 +7,7 @@ MOST_COMMON_COUNT = 10
 
 def _main():
     args = get_args()
-    words = proceed_word(load_words(args.filename))
+    words = split_to_words(load_text(args.filename))
 
     for word, _ in get_most_common_words(words, MOST_COMMON_COUNT):
         print(word)
@@ -19,18 +19,25 @@ def get_args():
     return parser.parse_args()
 
 
-def load_words(filepath):
+def load_text(filepath):
     with open(filepath, 'r', encoding='utf-8') as input_file:
         for line in input_file:
-            for word in line.split(' '):
+            yield line
+
+
+def split_to_words(text):
+    for line in text:
+        for word in line.split(' '):
+            word = clean_word(word)
+            if word.isalpha():
                 yield word
 
 
-def proceed_word(words):
-    for word in words:
-        word = word.lower().strip(string.punctuation + string.whitespace + '«»')
-        if word:
-            yield word
+def clean_word(word):
+    return word.lower().strip('{punctuation}{whitespace}«»'.format(
+        punctuation=string.punctuation,
+        whitespace=string.whitespace
+    ))
 
 
 def get_most_common_words(words, most_common_count):
