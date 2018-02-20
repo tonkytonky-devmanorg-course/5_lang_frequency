@@ -1,18 +1,18 @@
 import argparse
 from collections import Counter
+import os
 import string
 
 
 def _main():
     parser = argparse.ArgumentParser()
     args = get_args(parser)
-    text = load_text(args.path)
-    if not text:
+    if not os.path.exists(args.path):
         parser.error(
             'file with text not found, '
             'specify existing path in `path` argument'
         )
-    words = split_to_words(text)
+    words = split_to_words(load_text(args.path))
 
     for word, _ in get_most_common_words(words, args.count):
         print(word)
@@ -21,7 +21,7 @@ def _main():
 def get_args(parser):
     parser.add_argument(
         'path',
-        help='Path to TXT file with text to analyze'
+        help='Path to file with text to analyze'
     )
     parser.add_argument(
         '-c',
@@ -35,12 +35,9 @@ def get_args(parser):
 
 
 def load_text(filepath):
-    try:
-        with open(filepath, 'r', encoding='utf-8') as input_file:
-            for line in input_file:
-                yield line
-    except FileNotFoundError:
-        return None
+    with open(filepath, 'r', encoding='utf-8') as input_file:
+        for line in input_file:
+            yield line
 
 
 def split_to_words(text):
