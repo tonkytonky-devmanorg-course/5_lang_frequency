@@ -2,27 +2,45 @@ import argparse
 from collections import Counter
 import string
 
-MOST_COMMON_COUNT = 10
-
 
 def _main():
-    args = get_args()
-    words = split_to_words(load_text(args.filename))
+    parser = argparse.ArgumentParser()
+    args = get_args(parser)
+    text = load_text(args.path)
+    if not text:
+        parser.error(
+            'file with text not found, '
+            'specify existing path in `path` argument'
+        )
+    words = split_to_words(text)
 
-    for word, _ in get_most_common_words(words, MOST_COMMON_COUNT):
+    for word, _ in get_most_common_words(words, args.count):
         print(word)
 
 
-def get_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('filename', help='Path to TXT file with text to analyze')
+def get_args(parser):
+    parser.add_argument(
+        'path',
+        help='Path to TXT file with text to analyze'
+    )
+    parser.add_argument(
+        '-c',
+        '--count',
+        metavar='count',
+        help='The number of most common words to display',
+        type=int,
+        default=10
+    )
     return parser.parse_args()
 
 
 def load_text(filepath):
-    with open(filepath, 'r', encoding='utf-8') as input_file:
-        for line in input_file:
-            yield line
+    try:
+        with open(filepath, 'r', encoding='utf-8') as input_file:
+            for line in input_file:
+                yield line
+    except FileNotFoundError:
+        return None
 
 
 def split_to_words(text):
