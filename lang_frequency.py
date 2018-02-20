@@ -34,8 +34,8 @@ def proceed_word(words):
 
 
 def get_most_common_words(words, most_common_count):
-    frequency_dict = Counter(words)
-    return frequency_dict.most_common(most_common_count)
+    frequencies = Counter(words)
+    return frequencies.most_common(most_common_count)
 
 
 if __name__ == '__main__':
